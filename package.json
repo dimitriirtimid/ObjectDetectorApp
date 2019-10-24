@@ -8,6 +8,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.6.2",
+    "@tensorflow/tfjs": "^1.2.11",
+    "@tensorflow/tfjs-react-native": "alpha",
     "expo": "^35.0.0",
     "expo-gl": "^7.0.0",
     "expo-gl-cpp": "^7.0.0",
@@ -25,6 +28,8 @@
     "babel-jest": "24.9.0",
     "jest": "24.9.0",
     "jetifier": "^1.6.4",
+    "metro": "^0.56.3",
+    "metro-core": "^0.56.3",
     "metro-react-native-babel-preset": "0.56.0",
     "react-test-renderer": "16.9.0"
   },
