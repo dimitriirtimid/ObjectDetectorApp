@@ -34,4 +34,6 @@ target 'modeltest2' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
 end

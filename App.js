@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
 import { createCanvas } from 'canvas';
 // import { Base64 } from 'js-base64';
+import Canvas from 'react-native-canvas';
 
 import bike from './images/bicycle_base64_bin';
 
@@ -110,11 +111,27 @@ export default class App extends React.Component {
     this.state = {
       isTfReady: false,
       message: 'initial',
+      canvas: null,
     }
   }
 // export default function App() {
   
+  handleCanvas = (canvas) => {
+    this.setState({ canvas });
+    // const ctx = canvas.getContext('2d');
+    // ctx.fillStyle = 'purple';
+    // ctx.fillRect(0, 0, 100, 100);
+  }
+
 render() {
+  const img =        <Image source={require('./bicycle.jpeg')} 
+  style={{width: "10%", height: "10%"}}
+  onload={() => {
+    console.log('Image loaded!');
+    // ctx.drawImage(img, 0, 0);
+
+  }}
+  />
 
 var myArray = base64DecToArr("QmFzZSA2NCDigJQgTW96aWxsYSBEZXZlbG9wZXIgTmV0d29yaw==");
   return (
@@ -125,32 +142,50 @@ var myArray = base64DecToArr("QmFzZSA2NCDigJQgTW96aWxsYSBEZXZlbG9wZXIgTmV0d29yaw
       <Text>{this.state.message}</Text>
       <Button
                     title="Analyse"
-                    onPress={this.mountModel} 
+                    onPress={ () => this.mountModel(img) } 
                 />
+       <Canvas ref={this.handleCanvas}/>
+       {img}
       </Fragment>
     </View>
   );
 }
 
-getCanvas = async () => {
+getCanvas = async (img) => {
   const arr = base64DecToArr(bike);
   console.log('array:' + arr[0]);
   const blob = new Blob([arr], {type : 'image/jpg'});
   console.log('blob created');
   const canvas = createCanvas(800, 600);
   const ctx = canvas.getContext('2d');
+  
+  // const canvas = this.state.canvas;
+  // if (!canvas)
+  //   throw new Error("No canvas in state");
   console.log('canvas created');
 
+
+
+      // img.defaultSource = require('./bicycle.jpeg');
+      // img.onload = () => {
+      //   console.log('Image loaded!');
+      //   // ctx.drawImage(img, 0, 0);
+      // };
+
   const imageBitMap = await createImageBitmap(blob);
-  console.log('bitmap created');
+  console.log('bitmap created', imageBitMap);
+
+  for (var prop in imageBitMap) {
+    console.log(prop + ': ' + imageBitMap[prop]);
+  }
 
   ctx.drawImage(imageBitMap, 0, 0);
-  console.log('image drawn');
+  console.log('image drawn', ctx);
   return canvas;
 }
 
 
-  mountModel = async () => {
+  mountModel = async (img) => {
     // Wait for tf to be ready.
     try{
     console.log("starting tf");
