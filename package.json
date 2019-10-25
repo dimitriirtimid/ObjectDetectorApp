@@ -16,6 +16,7 @@
     "expo": "^35.0.0",
     "expo-gl": "^7.0.0",
     "expo-gl-cpp": "^7.0.0",
+    "jpeg-js": "^0.3.6",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-native": "0.59.10",
