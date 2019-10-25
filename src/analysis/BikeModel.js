@@ -22,22 +22,25 @@ import * as cocoSsd from '@tensorflow-models/coco-ssd';
       const model = await cocoSsd.load();
       console.log("model loaded");
 
-      // const canvas = await this.getCanvas2();
-      // console.log("canvas built");
-
-      const rawImageData = base64DecToArr(imageBase64);
+      let rawImageData = base64DecToArr(imageBase64);
       console.log('array built');
 
-      const tensor = imageToTensor(rawImageData);
+      // const tensor = imageToTensor(rawImageData);
+      // const tensor = imageToTensorScaled(rawImageData);
+      const tensor = imageToTensorScaled2(rawImageData);
       console.log('tensor created');
+
+      rawImageData = null;
 
       const predictions = await model.detect(tensor);
       console.log("success: ", predictions);
 
       return predictions;
+      // return [];
     }
       catch (err) {
       console.log('error - ' + err);
+      return [];
     }
 }
 
@@ -46,6 +49,7 @@ import * as cocoSsd from '@tensorflow-models/coco-ssd';
 const  imageToTensor = (rawImageData) => {
   const TO_UINT8ARRAY = true
   const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY)
+  console.log("image decoded: ", { width, height, length: data.length });
   // Drop the alpha channel info for mobilenet
   const buffer = new Uint8Array(width * height * 3)
   let offset = 0 // offset into original data
@@ -58,4 +62,67 @@ const  imageToTensor = (rawImageData) => {
   }
 
   return tf.tensor3d(buffer, [height, width, 3])
+}
+
+const  imageToTensorScaled = (rawImageData) => {
+  const TO_UINT8ARRAY = true
+  let { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY)
+  console.log("image decoded: ", { width, height, length: data.length });
+  // Drop the alpha channel info for mobilenet
+  let buffer = new Uint8Array(width * height * 3)
+  let offset = 0 // offset into original data
+  for (let i = 0; i < buffer.length; i += 3) {
+    buffer[i] = data[offset]
+    buffer[i + 1] = data[offset + 1]
+    buffer[i + 2] = data[offset + 2]
+
+    offset += 4
+  }
+  data = null;  // release memory
+
+  const buffer2 = new Uint8Array((width/2) * (height/2) * 3)
+
+  let idx = 0;
+  for (let i = 0; i < height; i += 2)
+    for (let j = 0; j < width; j += 6) {
+      buffer2[idx++] = buffer[i*width + j + 0];
+      buffer2[idx++] = buffer[i*width + j + 1];
+      buffer2[idx++] = buffer[i*width + j + 2];
+    }
+
+  buffer = null;  // release memory
+  return tf.tensor3d(buffer2, [height/2, width/2, 3])
+}
+
+const  imageToTensorScaled2 = (rawImageData) => {
+  const targetWidth = 100;
+  const targetHeight = 100;
+
+  const TO_UINT8ARRAY = true
+  let { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY)
+  console.log("image decoded: ", { width, height, length: data.length });
+  // Drop the alpha channel info for mobilenet
+  let buffer = new Uint8Array(width * height * 3)
+  let offset = 0 // offset into original data
+  for (let i = 0; i < buffer.length; i += 3) {
+    buffer[i] = data[offset]
+    buffer[i + 1] = data[offset + 1]
+    buffer[i + 2] = data[offset + 2]
+
+    offset += 4
+  }
+  data = null;  // release memory
+
+  const buffer2 = new Uint8Array(targetWidth * targetHeight * 3)
+
+  let idx = 0;
+  for (let i = 0; i < targetHeight; i++)
+    for (let j = 0; j < targetWidth; j += 3) {
+      buffer2[idx++] = buffer[i*width + j + 0];
+      buffer2[idx++] = buffer[i*width + j + 1];
+      buffer2[idx++] = buffer[i*width + j + 2];
+    }
+
+  buffer = null;  // release memory
+  return tf.tensor3d(buffer2, [targetWidth, targetHeight, 3])
 }

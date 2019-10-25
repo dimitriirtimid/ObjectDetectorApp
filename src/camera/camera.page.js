@@ -9,8 +9,10 @@ import styles from './styles';
 import loadAndPredict from '../tsexample/bodypix';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
+import * as model from '../analysis/BikeModel';
 
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
+import bike from '../../images/bicycle_base64_bin';
 
 
 export default class CameraPage extends React.Component {
@@ -25,6 +27,7 @@ export default class CameraPage extends React.Component {
         hasCameraPermission: null,
 
         lastImageUri: null,
+        predictions: [],
     };
 
     setFlashMode = (flashMode) => this.setState({ flashMode });
@@ -37,8 +40,10 @@ export default class CameraPage extends React.Component {
     };
 
     handleShortCapture = async () => {
-        const photoData = await this.camera.takePictureAsync();
+        const photoData = await this.camera.takePictureAsync( {base64: true} );
         this.setState({ capturing: false, captures: [photoData, ...this.state.captures], lastImageUri: photoData.uri })
+        // const pictureSizes = await this.Camera.getAvailablePictureSizesAsync("4:3");
+        // console.log('picture sizes: ' + pictureSizes);
     };
 
     handleLongCapture = async () => {
@@ -99,6 +104,28 @@ export default class CameraPage extends React.Component {
         console.log(predictions);
     }
 
+    analyse = async () => {
+        this.setState({  message: 'analyzing' });
+
+        // console.log('this:', this);
+        // console.log('cam:', this.camera);
+        // const pictureSizes = await this.camera.getAvailablePictureSizesAsync("4:3");
+        // console.log('picture sizes: ' + pictureSizes)
+
+        // const predictions = await model.analyse_bike();
+        // const predictions = await model.analyse(this.state.captures[0].base64);
+
+        const capture64 = this.state.captures[0].base64;
+        console.log('bike:    ' + bike.substr(0, 20) + ' - ' + bike.length);
+        console.log('capture: ' + capture64.substr(0, 20) + ' - ' + capture64.length);
+
+        const predictions = await model.analyse(capture64);
+        this.setState({  message: 'success: ' + predictions , predictions});
+    }
+
+    // resulting picture size:
+//     "height": 2210,
+//   "width": 3264,
     render() {
         const { hasCameraPermission, flashMode, cameraType, capturing, captures, lastImageUri } = this.state;
 
@@ -119,6 +146,7 @@ export default class CameraPage extends React.Component {
                         type={cameraType}
                         flashMode={flashMode}
                         style={styles.preview}
+                        pictureSize={3264/4 + 'x' + 2210/4}
                         ref={camera => this.camera = camera}
                     />
 
@@ -141,8 +169,11 @@ export default class CameraPage extends React.Component {
                 <Image id="testimage" source={{ uri: lastImageUri }} style={styles.galleryImage} />
                 <Button
                     title="Analyse"
-                    onPress={this.runModel} 
+                    onPress={this.analyse} 
                 />
+                        { this.state.predictions.map( (prediction, idx) => 
+            <Text key={idx}> {prediction.class + ':' + prediction.score} </Text>
+        )}
                 <Text>End image</Text>
                 </React.Fragment>
 
