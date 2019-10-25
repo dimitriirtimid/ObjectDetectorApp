@@ -21,7 +21,7 @@ These steps were taken to construct this app. There is no need to repeat them if
 expo init <project folder>
 expo install expo-permissions
 expo install expo-camera
-npm install react-native-easy-grid
-npm install @expo/vector-icons
+expo install react-native-easy-grid
+expo install @expo/vector-icons
 
 ````
