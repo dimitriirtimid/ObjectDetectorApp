@@ -8,6 +8,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CameraPage from '../camera/camera.page';
+import BikeScreen from '../screens/BikeScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -37,6 +38,7 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
+
 const LinksStack = createStackNavigator(
   {
     // Links: LinksScreen,
@@ -54,6 +56,24 @@ LinksStack.navigationOptions = {
 
 LinksStack.path = '';
 
+
+const BikeStack = createStackNavigator(
+  {
+    Links: BikeScreen,
+  },
+  config
+);
+
+BikeStack.navigationOptions = {
+  tabBarLabel: 'Bike',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'} />
+  ),
+};
+
+BikeStack.path = '';
+
+
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
@@ -70,9 +90,11 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = '';
 
+
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
+  BikeStack,
   SettingsStack,
 });
 

@@ -61,20 +61,3 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-// // App.js file
-// import React from 'react';
-// import { View, Text } from 'react-native';
-
-// import CameraPage from './src/camera.page';
-
-// export default class App extends React.Component {
-//     render() {
-//         return (
-//           // <View>
-//             <CameraPage />
-//             // </View>
-//         );
-//     };
-// };

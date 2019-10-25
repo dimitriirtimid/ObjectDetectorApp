@@ -8,7 +8,7 @@ import Canvas from 'react-native-canvas';
 import jpeg from 'jpeg-js';
 
 
-import bike from './images/bicycle_base64_bin';
+import bike from '../../images/bicycle_base64_bin';
 
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 // var fs = require('fs');
@@ -105,7 +105,7 @@ function UTF8ArrToStr (aBytes) {
 //   return arr;
 // }
 
-export default class App extends React.Component {
+export default class BikeScreen extends React.Component {
 
   constructor(props) {
     super(props);
