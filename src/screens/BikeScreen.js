@@ -159,7 +159,7 @@ var myArray = base64DecToArr("QmFzZSA2NCDigJQgTW96aWxsYSBEZXZlbG9wZXIgTmV0d29yaw
 
 analyse = async () => {
   this.setState({  message: 'analyzing' });
-  const predictions = await model.analyse();
+  const predictions = await model.analyse_bike();
   this.setState({  message: 'success: ' + predictions , predictions});
 }
 

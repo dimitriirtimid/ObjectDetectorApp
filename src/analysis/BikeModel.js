@@ -62,10 +62,7 @@ function base64DecToArr (sBase64, nBlockSize) {
 }
 
 
-const  imageToTensor = () => {
-    const rawImageData = base64DecToArr(bike);
-    console.log('array built');
-
+const  imageToTensor = (rawImageData) => {
     const TO_UINT8ARRAY = true
     const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY)
     // Drop the alpha channel info for mobilenet
@@ -82,7 +79,11 @@ const  imageToTensor = () => {
     return tf.tensor3d(buffer, [height, width, 3])
   }
 
-  export const analyse = async () => {
+  export const analyse_bike = async () => {
+    return await analyse(bike);
+  }
+
+  export const analyse = async (imageBase64) => {
     // Wait for tf to be ready.
     try{
     console.log("starting tf");
@@ -98,7 +99,10 @@ const  imageToTensor = () => {
     // const canvas = await this.getCanvas2();
     // console.log("canvas built");
 
-    const tensor = imageToTensor();
+    const rawImageData = base64DecToArr(imageBase64);
+    console.log('array built');
+
+    const tensor = imageToTensor(rawImageData);
     console.log('tensor created');
 
     // const predictions = await model.detect(canvas);
