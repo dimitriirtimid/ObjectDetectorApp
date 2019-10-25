@@ -6,6 +6,7 @@ import { createCanvas } from 'canvas';
 // import { Base64 } from 'js-base64';
 import Canvas from 'react-native-canvas';
 import jpeg from 'jpeg-js';
+import * as model from '../analysis/BikeModel';
 
 
 import bike from '../../images/bicycle_base64_bin';
@@ -114,6 +115,7 @@ export default class BikeScreen extends React.Component {
       isTfReady: false,
       message: 'initial',
       canvas: null,
+      predictions: [],
     }
   }
 // export default function App() {
@@ -144,13 +146,21 @@ var myArray = base64DecToArr("QmFzZSA2NCDigJQgTW96aWxsYSBEZXZlbG9wZXIgTmV0d29yaw
       <Text>{this.state.message}</Text>
       <Button
                     title="Analyse"
-                    onPress={ () => this.mountModel() } 
+                    onPress={ () => this.analyse() } 
                 />
        <Canvas ref={this.handleCanvas}/>
-       {/* {img} */}
+       { this.state.predictions.map( (prediction, idx) => 
+          <Text key={idx}> {prediction.class + ':' + prediction.score} </Text>
+       )}
       </Fragment>
     </View>
   );
+}
+
+analyse = async () => {
+  this.setState({  message: 'analyzing' });
+  const predictions = await model.analyse();
+  this.setState({  message: 'success: ' + predictions , predictions});
 }
 
 getCanvas = async () => {
@@ -272,7 +282,7 @@ getCanvas2 = async () => {
 
     // const predictions = await model.detect(canvas);
     const predictions = await model.detect(tensor);
-    this.setState({  message: 'success: ' + predictions });
+    this.setState({  message: 'success: ' + predictions , predictions});
     console.log("success: ", predictions);
 
     }
