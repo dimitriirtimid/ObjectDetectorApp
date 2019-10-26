@@ -6,7 +6,7 @@ import * as Permissions from 'expo-permissions';
 import Toolbar from '../components/CameraToolbar';
 import styles from '../styles/CameraStyles';
 import '@tensorflow/tfjs-react-native';
-import * as model from '../analysis/BikeModel';
+import * as model from '../analysis/ObjectDetectorModel';
 
 export default class CameraPage extends React.Component {
     camera = null;

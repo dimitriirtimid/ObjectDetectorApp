@@ -11,6 +11,7 @@
     "@expo/samples": "^3.0.3",
     "@expo/vector-icons": "^10.0.6",
     "@react-native-community/async-storage": "^1.6.2",
+    "@react-navigation/web": "^1.0.0-alpha.9",
     "@tensorflow-models/body-pix": "^1.1.2",
     "@tensorflow-models/coco-ssd": "^2.0.0",
     "@tensorflow/tfjs": "^1.2.11",

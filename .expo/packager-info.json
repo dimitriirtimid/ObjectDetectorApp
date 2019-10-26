@@ -3,8 +3,8 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": "https://kw-c86.anonymous.modeltest2.exp.direct",
-  "packagerNgrokUrl": "https://packager.kw-c86.anonymous.modeltest2.exp.direct",
-  "ngrokPid": 85759,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

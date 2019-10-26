@@ -1,6 +1,6 @@
 {
   "name": "modeltest2",
-  "displayName": "just another try",
+  "displayName": "Object detector",
   "expo": {
     "name": "modeltest2",
     "slug": "expo-template-bare",
