@@ -113,16 +113,40 @@ const  imageToTensorScaled2 = (rawImageData) => {
   }
   data = null;  // release memory
 
-  const buffer2 = new Uint8Array(targetWidth * targetHeight * 3)
+  // const buffer2 = new Uint8Array(targetWidth * targetHeight * 3)
 
-  let idx = 0;
+  // let idx = 0;
+  // for (let i = 0; i < targetHeight; i++)
+  //   for (let j = 0; j < targetWidth; j += 3) {
+  //     buffer2[idx++] = buffer[i*width + j + 0];
+  //     buffer2[idx++] = buffer[i*width + j + 1];
+  //     buffer2[idx++] = buffer[i*width + j + 2];
+  //   }
+
+  const buffer2 = resizeImage(buffer, width, height, targetWidth, targetHeight);
+  buffer = null;  // release memory
+
+  return tf.tensor3d(buffer2, [targetWidth, targetHeight, 3])
+}
+
+// Buffer should contain 3 UInt8 entries (RGB) per pixel
+const resizeImage = (buffer, width, height, targetWidth, targetHeight) => {
+  if (targetWidth > width || targetHeight > height)
+    throw new Error("Error resizing, target width and height may not exceed orginal width and height");
+
+  let targetBuffer = new Uint8Array(targetWidth * targetHeight * 3)
+
+  let targetIdx = 0;
   for (let i = 0; i < targetHeight; i++)
-    for (let j = 0; j < targetWidth; j += 3) {
-      buffer2[idx++] = buffer[i*width + j + 0];
-      buffer2[idx++] = buffer[i*width + j + 1];
-      buffer2[idx++] = buffer[i*width + j + 2];
+    for (let j = 0; j < targetWidth; j++) {
+      const x = Math.round(width*j/targetWidth);
+      const y = Math.round(height*i/targetHeight);
+      const idx = (y*width + x)*3;
+
+      targetBuffer[targetIdx++] = buffer[idx + 0];
+      targetBuffer[targetIdx++] = buffer[idx + 1];
+      targetBuffer[targetIdx++] = buffer[idx + 2];
     }
 
-  buffer = null;  // release memory
-  return tf.tensor3d(buffer2, [targetWidth, targetHeight, 3])
+  return targetBuffer;
 }
