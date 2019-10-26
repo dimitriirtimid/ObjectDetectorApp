@@ -5,10 +5,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import CameraPage from '../camera/camera.page';
-import BikeScreen from '../screens/BikeScreen';
+import CameraPage from '../screens/CameraScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -39,39 +37,21 @@ HomeStack.navigationOptions = {
 HomeStack.path = '';
 
 
-const LinksStack = createStackNavigator(
+const CameraStack = createStackNavigator(
   {
-    // Links: LinksScreen,
     Links: CameraPage,
   },
   config
 );
 
-LinksStack.navigationOptions = {
+CameraStack.navigationOptions = {
   tabBarLabel: 'Scan',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'} />
   ),
 };
 
-LinksStack.path = '';
-
-
-const BikeStack = createStackNavigator(
-  {
-    Links: BikeScreen,
-  },
-  config
-);
-
-BikeStack.navigationOptions = {
-  tabBarLabel: 'Bike',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'} />
-  ),
-};
-
-BikeStack.path = '';
+CameraStack.path = '';
 
 
 const SettingsStack = createStackNavigator(
@@ -93,8 +73,7 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  BikeStack,
+  CameraStack,
   SettingsStack,
 });
 

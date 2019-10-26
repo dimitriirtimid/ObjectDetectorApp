@@ -3,10 +3,8 @@ import React from 'react';
 import { View, Text, Image, Button } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
-import Toolbar from './toolbar.component';
-import Gallery from './gallery.component';
-import styles from './styles';
-import loadAndPredict from '../tsexample/bodypix';
+import Toolbar from '../navigation/Toolbar';
+import styles from '../styles/CameraStyles';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
 import * as model from '../analysis/BikeModel';
@@ -150,7 +148,6 @@ export default class CameraPage extends React.Component {
                         ref={camera => this.camera = camera}
                     />
 
-                    {captures.length > 0 && <Gallery captures={captures}/>}
                     <Toolbar 
                         capturing={capturing}
                         flashMode={flashMode}
