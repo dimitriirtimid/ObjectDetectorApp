@@ -22,7 +22,7 @@
     "expo-gl": "^7.0.0",
     "expo-gl-cpp": "^7.0.0",
     "expo-permissions": "^7.0.0",
-    "jpeg-js": "^0.3.6",
+    "jpeg-js": "^0.4.4",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-native": "0.59.10",
